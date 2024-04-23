@@ -16,12 +16,14 @@ struct Token{
 class CyanideLexer{
     private:
         char currentToken ;
-        int cursor, srcLen ;
         std::string srcCode ;
+        int cursor, lineNum, charNum, srcLen ;
 
     public:
         CyanideLexer(std::string src){
             cursor = 0 ;
+            lineNum = 1 ;
+            charNum = 1 ;
             srcCode = src ;
             srcLen = srcCode.length() ;
             currentToken = srcCode.at(cursor) ;
@@ -31,6 +33,7 @@ class CyanideLexer{
             if(cursor < srcLen){
                 char temp = currentToken ;
                 cursor += 1 ;
+                charNum += 1 ;
                 currentToken = srcCode[cursor] ;
                 return temp ;
             }
@@ -58,6 +61,10 @@ class CyanideLexer{
                     }
                 }
                 if(skip){
+                    if(currentToken == '\n'){
+                        lineNum += 1 ;
+                        charNum = 1 ;
+                    }
                     getNextToken() ;
                     skip = false ;
                 }
@@ -149,7 +156,8 @@ class CyanideLexer{
                             break ;
 
                         default:
-                            std::cerr << "Foreign token alert ! -> [" << currentToken << "]" << std::endl ;
+                            std::cerr << "!!! Foreign token alert -> [" << currentToken << "] !!! " ;
+                            std::cerr << "< Check: Line " << lineNum << " (" << charNum << ") >" << std::endl ; 
                             exit(1) ;
                             break ;
                         
