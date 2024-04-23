@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]){
     if(argc < 2){
-        std::cout << "cyanide example.cy" << std::endl ;
+        std::cerr << "cyanide example.cy" << std::endl ;
         exit(1) ;
     }
 
@@ -20,7 +20,10 @@ int main(int argc, char *argv[]){
     
     std::cout << "Source Code: \n" <<  buffer.str() << std::endl ;
     CyanideLexer lexer(buffer.str()) ;
+    std::vector<Token*> tokens = lexer.tokenizeCode() ;
     std::cout << "------------------------" << std::endl ;
-
+    for(Token* token : tokens){
+        std::cout << token->tokenValue << " -> " << lexer.getType(token->tokenType) << std::endl ; 
+    }
     return 0 ;
 }
