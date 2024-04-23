@@ -149,7 +149,7 @@ class CyanideLexer{
                             break ;
 
                         default:
-                            std::cerr << "Foreign token alert !" << std::endl ;
+                            std::cerr << "Foreign token alert ! -> [" << currentToken << "]" << std::endl ;
                             exit(1) ;
                             break ;
                         
