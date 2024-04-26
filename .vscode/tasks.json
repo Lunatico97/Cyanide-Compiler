@@ -13,7 +13,7 @@
             "args": [
                 "cyanide-compiler.cpp",
                 "-o",
-                "cyanide"
+                "cyanide",
             ],
             "group": {
                 "kind": "build",

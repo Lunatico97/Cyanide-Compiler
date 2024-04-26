@@ -3,9 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 enum type{
-    TOKEN_ID, TOKEN_INT, TOKEN_ASGN, TOKEN_SCLN, TOKEN_LP, TOKEN_RP
+    TOKEN_ID, TOKEN_INT, TOKEN_EOF, TOKEN_ASGN, TOKEN_SCLN, TOKEN_LP, TOKEN_RP, TOKEN_KW
 } ;
 
 struct Token{
@@ -18,6 +19,7 @@ class CyanideLexer{
         char currentToken ;
         std::string srcCode ;
         int cursor, lineNum, charNum, srcLen ;
+        std::vector<std::string> keywords = {"peek"} ;
 
     public:
         CyanideLexer(std::string src){
@@ -91,18 +93,21 @@ class CyanideLexer{
 
                 case TOKEN_RP:
                     return "right-bracket" ;
+
+                case TOKEN_KW:
+                    return "keyword" ;
             }
             return "invalid" ;
         }
 
         // Convert source code to tokens
-        Token* tokenizeIdentifier(){
+        Token* tokenizeLangTokens(){
             std::stringstream buffer ;
             while(isalnum(currentToken) || currentToken == '_'){
                 buffer << getNextToken() ;
             }
             Token *newToken = new Token() ;
-            newToken->tokenType = TOKEN_ID ;
+            newToken->tokenType = (std::find(keywords.begin(), keywords.end(), buffer.str()) != keywords.end()) ? TOKEN_KW : TOKEN_ID ;
             newToken->tokenValue = buffer.str() ;
             return newToken ;
         }
@@ -132,7 +137,7 @@ class CyanideLexer{
             while(cursor < srcLen && !eof){
                 skipDelimiters() ;
                 if(isalpha(currentToken)){
-                    tokens.push_back(tokenizeIdentifier()) ;
+                    tokens.push_back(tokenizeLangTokens()) ;
                 }
                 else if(isdigit(currentToken)){
                     tokens.push_back(tokenizeInteger()) ;
@@ -153,6 +158,10 @@ class CyanideLexer{
 
                         case ')':
                             tokens.push_back(tokenizeUnique(TOKEN_RP)) ;
+                            break ;
+                        
+                        case '\0':
+                            tokens.push_back(tokenizeUnique(TOKEN_EOF)) ;
                             break ;
 
                         default:
