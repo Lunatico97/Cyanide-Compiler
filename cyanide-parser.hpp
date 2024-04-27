@@ -90,14 +90,8 @@ class CyanideParser{
             }
             else{
                 std::cout << "Syntax Error - Undefined keyword !!!" << std::endl ;
+                exit(1) ;
             }
-            std::string *buffer = &currentToken->tokenValue ;
-            proceed(TOKEN_ID) ;
-            proceed(TOKEN_ASGN) ;
-            Node *newNode = new Node() ;
-            newNode->nodeType = NODE_ID ;
-            newNode->child = parseInt() ;
-            return newNode ;
         }
 
         Node* parseTree(){
