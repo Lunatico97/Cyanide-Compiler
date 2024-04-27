@@ -1,2 +1,2 @@
 age : 18 ;
-peek age ;
+peek @18? ;

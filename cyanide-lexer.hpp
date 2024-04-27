@@ -19,7 +19,7 @@ class CyanideLexer{
         char currentToken ;
         std::string srcCode ;
         int cursor, lineNum, charNum, srcLen ;
-        std::vector<std::string> keywords = {"peek"} ;
+        std::vector<std::string> keywords = {"peek", "ret"} ;
 
     public:
         CyanideLexer(std::string src){
@@ -96,6 +96,9 @@ class CyanideLexer{
 
                 case TOKEN_KW:
                     return "keyword" ;
+
+                case TOKEN_EOF:
+                    return "EOF" ;
             }
             return "invalid" ;
         }
@@ -152,11 +155,11 @@ class CyanideLexer{
                             tokens.push_back(tokenizeUnique(TOKEN_ASGN)) ;
                             break ;
 
-                        case '(':
+                        case '@':
                             tokens.push_back(tokenizeUnique(TOKEN_LP)) ;
                             break ;
 
-                        case ')':
+                        case '?':
                             tokens.push_back(tokenizeUnique(TOKEN_RP)) ;
                             break ;
                         
